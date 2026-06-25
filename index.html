@@ -90,10 +90,20 @@ body{background:var(--bg);color:var(--text);font-size:20px;line-height:1.85;
 .toc-title{font-size:34px;color:var(--accent);text-align:center;font-weight:700;letter-spacing:8px;margin:0 0 8px;}
 .toc-desc{font-size:17px;color:var(--text-muted);text-align:center;margin:0 0 26px;letter-spacing:1px;}
 .toc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;}
-.toc-card{display:flex;gap:16px;align-items:flex-start;text-decoration:none;
+.toc-card{position:relative;display:flex;gap:16px;align-items:flex-start;text-decoration:none;
  background:var(--card);border:1px solid var(--border);border-radius:12px;
- padding:20px 22px;box-shadow:0 2px 8px rgba(91,58,41,.06);transition:transform .18s,box-shadow .18s;cursor:pointer;}
+ padding:20px 22px 52px;box-shadow:0 2px 8px rgba(91,58,41,.06);transition:transform .18s,box-shadow .18s;cursor:pointer;}
 .toc-card:hover{transform:translateY(-3px);box-shadow:0 8px 22px rgba(91,58,41,.14);}
+.toc-card-link{position:absolute;inset:0;z-index:1;border-radius:12px;}
+.toc-card>.toc-num,.toc-card>.toc-body{position:relative;z-index:2;pointer-events:none;}
+.toc-yt{position:absolute;right:16px;bottom:14px;z-index:3;display:inline-flex;align-items:center;gap:5px;
+ padding:6px 14px;border-radius:18px;text-decoration:none;
+ font-family:"Noto Sans TC",sans-serif;font-size:13px;font-weight:500;letter-spacing:1px;
+ color:#fff;background:linear-gradient(135deg,#b8860b,#d4a84b);
+ border:1px solid rgba(184,134,11,.6);box-shadow:0 2px 8px rgba(184,134,11,.3);
+ transition:transform .15s,box-shadow .15s,filter .15s;}
+.toc-yt:hover{transform:translateY(-1px) scale(1.04);box-shadow:0 4px 14px rgba(184,134,11,.5);filter:brightness(1.06);}
+.toc-yt:active{transform:scale(.96);}
 .toc-num{flex:0 0 auto;width:46px;height:46px;border-radius:50%;background:var(--gold);color:#fff;
  display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;
  font-family:"Noto Sans TC",sans-serif;}
@@ -151,6 +161,23 @@ body{background:var(--bg);color:var(--text);font-size:20px;line-height:1.85;
  display:none;box-shadow:0 4px 14px rgba(0,0,0,.25);}
 #backTop.show{display:block;}
 
+/* 主頁固定影音浮動鈕：隨閱讀中的品自動切換連結與品名 */
+#videoFab{position:fixed;right:22px;bottom:80px;z-index:121;
+ display:none;align-items:center;gap:8px;text-decoration:none;
+ padding:11px 20px;border-radius:30px;
+ font-family:"Noto Sans TC",sans-serif;font-size:15px;font-weight:600;letter-spacing:1.5px;
+ color:#fff;background:linear-gradient(135deg,#9c6f08,#b8860b 55%,#d4a84b);
+ border:1px solid rgba(212,168,75,.7);
+ box-shadow:0 4px 18px rgba(184,134,11,.45),0 2px 6px rgba(0,0,0,.2);
+ transition:transform .16s,box-shadow .16s,filter .16s,opacity .3s;}
+#videoFab.show{display:inline-flex;}
+#videoFab:hover{transform:translateY(-2px) scale(1.04);filter:brightness(1.08);
+ box-shadow:0 7px 24px rgba(184,134,11,.6);}
+#videoFab:active{transform:scale(.96);}
+#videoFab .vf-play{font-size:14px;line-height:1;}
+#videoFab .vf-name{white-space:nowrap;}
+@media(max-width:600px){#videoFab{font-size:13.5px;padding:10px 16px;right:14px;bottom:74px;}}
+
 @media(max-width:900px){
  #sb{transform:translateX(-100%);transition:transform .25s;}
  #sb.open{transform:translateX(0);}
@@ -160,41 +187,6 @@ body{background:var(--bg);color:var(--text);font-size:20px;line-height:1.85;
  .ch-name{font-size:28px;}
  .toc-grid{grid-template-columns:1fr;}
 }
-
-/* wy-cross-nav-css v1 */
-/* ── 跨卷導覽（側欄底部）── */
-.sb-cross{display:flex;flex-direction:column;align-items:center;gap:8px;
-  width:100%;margin:18px 0 4px;padding:18px 4px 6px;position:relative;}
-.sb-cross::before{content:"";position:absolute;top:0;left:14%;right:14%;
-  height:1px;background:linear-gradient(90deg,
-    transparent 0%,rgba(184,134,11,.15) 18%,
-    var(--gold,#b8860b) 50%,
-    rgba(184,134,11,.15) 82%,transparent 100%);
-  box-shadow:0 1px 0 rgba(212,168,75,.18);}
-.sb-cross::after{content:"";position:absolute;top:6px;left:38%;right:38%;
-  height:1px;background:linear-gradient(90deg,
-    transparent,rgba(184,134,11,.55),transparent);}
-.sb-x{display:flex;flex-direction:column;align-items:center;gap:3px;
-  text-decoration:none;color:var(--sbText,#d4c4a8);padding:4px 4px;width:100%;
-  border-radius:7px;transition:all .25s;}
-.sb-x:hover{background:rgba(184,134,11,.14);transform:translateY(-1px);}
-.sb-x-glyph{width:30px;height:30px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  border:1.2px solid rgba(212,196,168,.55);
-  color:var(--goldL,#d4a84b);font-family:"Noto Sans TC",sans-serif;font-size:14px;
-  background:rgba(184,134,11,.08);transition:all .25s;}
-.sb-x:hover .sb-x-glyph{border-color:var(--gold,#b8860b);color:#fff;
-  background:linear-gradient(135deg,var(--gold,#b8860b),var(--goldL,#d4a84b));
-  box-shadow:0 0 10px rgba(184,134,11,.5);}
-.sb-x-label{font-family:"Noto Sans TC",sans-serif;font-size:10.5px;
-  letter-spacing:1.2px;color:var(--sbText,#d4c4a8);opacity:.78;text-align:center;
-  line-height:1.25;}
-.sb-x:hover .sb-x-label{color:var(--goldL,#d4a84b);opacity:1;}
-.sb-x-hub .sb-x-glyph{background:linear-gradient(135deg,
-  rgba(184,134,11,.22),rgba(212,168,75,.18));
-  border-color:rgba(212,168,75,.55);color:var(--goldL,#d4a84b);font-size:13px;
-  font-weight:700;letter-spacing:1px;}
-
 </style><meta name="wy-full-protection" content="v2-silent">
 <meta name="GPTBot" content="noai">
 <meta name="ChatGPT-User" content="noai,noimageai">
@@ -302,21 +294,6 @@ body{background:var(--bg);color:var(--text);font-size:20px;line-height:1.85;
 <a class="sb-item" data-ch="2" href="#ch-2"><span class="sb-circle">二</span><span class="sb-label" data-wytext="kumhgczCjfrl"></span></a>
 <a class="sb-item" data-ch="3" href="#ch-3"><span class="sb-circle">三</span><span class="sb-label" data-wytext="kNSkgczCjfrl"></span></a>
 </nav>
-  <!-- wy-cross-nav v1 -->
-  <div class="sb-cross">
-    <a class="sb-x" href="https://weiwen0925.github.io/dazhidulun-76/" title="第七十六卷">
-      <span class="sb-x-glyph">←</span>
-      <span class="sb-x-label">卷七十六</span>
-    </a>
-    <a class="sb-x sb-x-hub" href="https://weiwen0925.github.io/dazhidulun-0/" title="大智度論門頁">
-      <span class="sb-x-glyph">智</span>
-      <span class="sb-x-label">門頁</span>
-    </a>
-    <a class="sb-x" href="https://weiwen0925.github.io/dazhidulun-78/" title="第七十八卷">
-      <span class="sb-x-glyph">→</span>
-      <span class="sb-x-label">卷七十八</span>
-    </a>
-  </div>
 </aside>
 <main class="main">
 <section class="site-hero">
@@ -336,9 +313,9 @@ body{background:var(--bg);color:var(--text);font-size:20px;line-height:1.85;
 <h2 class="toc-title" data-wytext="kMGQRIbhxkmN+eg="></h2>
 <div class="toc-desc" data-wytext="kvSagNn5jeTlkdT2Tu+AF8jzmZPBpIHy+0ir01WL2cLIsprI+7CTwa2B8vuM0O+cyO1OwoqpDZGd25yoyYT36Y3c/Inm7w=="></div>
 <div class="toc-grid">
-<a class="toc-card" data-ch="1" href="#ch-1"><span class="toc-num" data-wytext="k8Gt"></span><span class="toc-body"><span class="toc-name" data-wytext="kNWBgNn6jfrlVa7CTsSwvMjSk5PBgIDZ94DE7ZD/9ImBm9Ko29T6+Mnc4Z7R4o3R9A=="></span><span class="toc-sub" data-wytext="n/GBjOrfjc/mnfXuiYSNF+/BEZPDoYzK3IzTwJP46E7vgBfK8pCQ4pWA2PGP8txVrsJOyrOWyMimk8Cmgd/t"></span></span></a>
-<a class="toc-card" data-ch="2" href="#ch-2"><span class="toc-num" data-wytext="k8Oh"></span><span class="toc-body"><span class="toc-name" data-wytext="kNWBgNv2jfrlVa7CTsinu8jbiZLqrIPN1o3syZDh9IqXuw=="></span><span class="toc-sub" data-wytext="kM25gNn6jNHpnPfpibez3qrn1P7iyO7+n9beRLfbVYqVtNKc0tnJ1sXJ6J/X6oLG+VWsmhfTlfbUyMzJ3OyT8/WB+N+T9oLesLyTuOw="></span></span></a>
-<a class="toc-card" data-ch="3" href="#ch-3"><span class="toc-num" data-wytext="k8Gk"></span><span class="toc-body"><span class="toc-name" data-wytext="kNWBgNnzjfrlVa7CTsSwvMrbuJLUlYHy+4/FyJDp2IugttOV/w=="></span><span class="toc-sub" data-wytext="kcq4g8zzjdbpVa7CTsiJqcjGvJHLloHpyo3P5pDD007vgBfL6p2R+YqC2f+O3sxVrsJOxb+bxf2UkMGQgvXngMLckNbT"></span></span></a>
+<div class="toc-card" data-ch="1"><a aria-label="第一品 · 釋夢中不證品第六十一之餘" class="toc-card-link" data-ch="1" href="#ch-1"></a><span class="toc-num" data-wytext="k8Gt"></span><span class="toc-body"><span class="toc-name" data-wytext="kNWBgNn6jfrlVa7CTsSwvMjSk5PBgIDZ94DE7ZD/9ImBm9Ko29T6+Mnc4Z7R4o3R9A=="></span><span class="toc-sub" data-wytext="n/GBjOrfjc/mnfXuiYSNF+/BEZPDoYzK3IzTwJP46E7vgBfK8pCQ4pWA2PGP8txVrsJOyrOWyMimk8Cmgd/t"></span></span><a aria-label="觀看第一品影音說明" class="toc-yt" data-wytext="le+bRITH2YD7xg==" href="https://youtu.be/Zk6uC8Do74Y" rel="noopener" target="_blank" title="觀看第一品影音說明"></a></div>
+<div class="toc-card" data-ch="2"><a aria-label="第二品 · 同學品第六十二" class="toc-card-link" data-ch="2" href="#ch-2"></a><span class="toc-num" data-wytext="k8Oh"></span><span class="toc-body"><span class="toc-name" data-wytext="kNWBgNv2jfrlVa7CTsinu8jbiZLqrIPN1o3syZDh9IqXuw=="></span><span class="toc-sub" data-wytext="kM25gNn6jNHpnPfpibez3qrn1P7iyO7+n9beRLfbVYqVtNKc0tnJ1sXJ6J/X6oLG+VWsmhfTlfbUyMzJ3OyT8/WB+N+T9oLesLyTuOw="></span></span><a aria-label="觀看第二品影音說明" class="toc-yt" data-wytext="le+bRITH2YD7xg==" href="https://youtu.be/VSH5T63zy3U" rel="noopener" target="_blank" title="觀看第二品影音說明"></a></div>
+<div class="toc-card" data-ch="3"><a aria-label="第三品 · 釋等學品第六十三" class="toc-card-link" data-ch="3" href="#ch-3"></a><span class="toc-num" data-wytext="k8Gk"></span><span class="toc-body"><span class="toc-name" data-wytext="kNWBgNnzjfrlVa7CTsSwvMrbuJLUlYHy+4/FyJDp2IugttOV/w=="></span><span class="toc-sub" data-wytext="kcq4g8zzjdbpVa7CTsiJqcjGvJHLloHpyo3P5pDD007vgBfL6p2R+YqC2f+O3sxVrsJOxb+bxf2UkMGQgvXngMLckNbT"></span></span><a aria-label="觀看第三品影音說明" class="toc-yt" data-wytext="le+bRITH2YD7xg==" href="https://youtu.be/l5zTk42L258" rel="noopener" target="_blank" title="觀看第三品影音說明"></a></div>
 </div>
 </section>
 <section class="chapter" id="ch-1">
@@ -385,7 +362,11 @@ body{background:var(--bg);color:var(--text);font-size:20px;line-height:1.85;
 <div data-wy-notice="v2" style="margin:0;padding:26px 20px;background:#1e1a14;border-top:2px solid #b8860b;text-align:center;font-family:'Noto Sans TC','Microsoft JhengHei',sans-serif;font-size:13px;line-height:1.9;color:#c4a76c;letter-spacing:1px;"><div style="max-width:760px;margin:0 auto;">本文為個人研讀彙整，歡迎轉發結緣；轉發請保留連結與作者頻道<a href="https://www.youtube.com/@Chengweiwen/posts" rel="noopener" style="color:#d4a84b;text-decoration:none;border-bottom:1px dotted #b8860b;margin:0 4px;" target="_blank">https://www.youtube.com/@Chengweiwen/posts</a>。<br/>願以此功德，普及於一切；<br/>我等與眾生，皆共成佛道。</div></div><footer class="site-footer" data-wytext="kt2KgvjAjdPCncfjTu+AF8j7hpPBroHs+4zR51Wuwk7Km5vJzrGS6qyM5smPxciR1PyLvrbSkO/X4s0NptZajNf5kOLqi6iP36Xx1Of9yPfgks/Kguv8kP6l34uC"></footer>
 </main>
 <button aria-label="回到頂部" id="backTop">↑</button>
+<a href="https://youtu.be/Zk6uC8Do74Y" id="videoFab" rel="noopener" target="_blank" title="觀看本品影音說明">
+<span class="vf-play">▶</span><span class="vf-name" data-wytext="keWBgfL7jdTVnPPG"></span>
+</a>
 <script>
+var WY_VIDEOS=[{"url": "https://youtu.be/Zk6uC8Do74Y", "name": "夢中不證影音"}, {"url": "https://youtu.be/VSH5T63zy3U", "name": "同學品影音"}, {"url": "https://youtu.be/l5zTk42L258", "name": "等學品影音"}];
 
 var sbBrand=document.getElementById('sbBrand');
 if(sbBrand){sbBrand.addEventListener('click',function(e){e.preventDefault();window.scrollTo({top:0,behavior:'smooth'});});}
@@ -434,8 +415,21 @@ var _rt=0,_riv=setInterval(function(){_rt++;resizeAllFrames();if(_rt>50)clearInt
 
 var items=Array.prototype.slice.call(document.querySelectorAll('.sb-item'));
 var secs=Array.prototype.slice.call(document.querySelectorAll('section.chapter'));
+var vfab=document.getElementById('videoFab');
+var vfName=vfab?vfab.querySelector('.vf-name'):null;
+function updateFab(idx){
+ if(!vfab||!WY_VIDEOS||!WY_VIDEOS[idx])return;
+ var v=WY_VIDEOS[idx];
+ if(vfab.getAttribute('href')!==v.url)vfab.setAttribute('href',v.url);
+ if(vfName&&vfName.textContent!==v.name)vfName.textContent=v.name;
+ vfab.setAttribute('title','觀看「'+v.name+'」影音說明');
+ /* 進入正文（首品標頭過了視窗中段）才顯示 */
+ var reached=secs.length&&secs[0].getBoundingClientRect().top<window.innerHeight*0.55;
+ vfab.classList.toggle('show',!!reached);
+}
 function highlight(){var idx=0;for(var i=0;i<secs.length;i++){if(secs[i].getBoundingClientRect().top<window.innerHeight*0.35)idx=i;}
- items.forEach(function(it,i){it.classList.toggle('active',i===idx);});}
+ items.forEach(function(it,i){it.classList.toggle('active',i===idx);});
+ updateFab(idx);}
 window.addEventListener('scroll',highlight,{passive:true});highlight();
 
 (function(){var blk=function(e){e.preventDefault();return false;};
